@@ -1,0 +1,24 @@
+{
+  "name": "clientsapi_cse341",
+  "version": "1.0.0",
+  "description": "Firms that use  online service and user details",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raphaeltaurai/clientsAPI_CSE341.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raphaeltaurai/clientsAPI_CSE341/issues"
+  },
+  "homepage": "https://github.com/raphaeltaurai/clientsAPI_CSE341#readme",
+  "dependencies": {
+    "mongoose": "^8.18.3",
+    "swagger-ui-express": "^5.0.1"
+  }
+}
