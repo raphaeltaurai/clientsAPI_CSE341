@@ -1,23 +1,35 @@
 const routes = require('express').Router();
-const temples = require('../controllers/temple.js');
+const clients = require('../controllers/client.js');
 
-routes.get('/', temples.findAll);
+// Get all clients
+routes.get('/', clients.findAll);
 
-// Create a new Temple
-routes.post('/', temples.create);
+// Create a new client
+routes.post('/', clients.create);
 
-// Retrieve all published Temples
+// Get clients with additional info
+routes.get('/additional-info', clients.findAllWithAdditionalInfo);
 
-// Retrieve a single Temple with id
-routes.get('/:temple_id', temples.findOne);
+// Get a single client by id
+routes.get('/:client_id', clients.findOne);
 
-// Update a Temple with id
-// routes.put('/:id', temples.update);
+// Update a client by id
+routes.put('/:client_id', clients.update);
 
-// Delete a Temple with id
-// routes.delete('/:id', temples.delete);
+// Delete a client by id
+routes.delete('/:client_id', clients.delete);
 
-// Create a new Temple
-// routes.delete('/', temples.deleteAll);
+// Delete all clients
+routes.delete('/', clients.deleteAll);
+
+// Employee management routes
+// Add an employee to a client
+routes.post('/:client_id/employees', clients.addEmployee);
+
+// Get all employees for a specific client
+routes.get('/:client_id/employees', clients.getClientEmployees);
+
+// Remove an employee from a client
+routes.delete('/:client_id/employees/:employee_id', clients.removeEmployee);
 
 module.exports = routes;

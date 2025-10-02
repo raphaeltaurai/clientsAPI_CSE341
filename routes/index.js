@@ -1,16 +1,19 @@
 const routes = require('express').Router();
-const temple = require('./temple');
+const client = require('./clients');
+const employee = require('./employees');
 
-routes.use('/', require('./swagger'));
-routes.use('/temples', temple);
-routes.use(
-  '/',
-  (docData = (req, res) => {
-    let docData = {
-      documentationURL: 'https://nathanbirch.github.io/nathan-byui-api-docs',
-    };
-    res.send(docData);
-  })
-);
+routes.use('/clients', client);
+routes.use('/employees', employee);
+routes.get('/', (req, res) => {
+  res.send({
+    message: 'Hello World! Welcome to the Clients API',
+    documentationURL: 'http://localhost:8000/api-docs',
+    endpoints: {
+      clients: '/clients',
+      employees: '/employees',
+      swagger: '/api-docs'
+    }
+  });
+});
 
 module.exports = routes;
