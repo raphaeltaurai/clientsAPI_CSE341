@@ -5,10 +5,9 @@
     "description": "API for managing clients and employees",
     "version": "1.0.0"
   },
-  "host": "localhost:8000",
+  "host": "clientsapi-cse341.onrender.com/",
   "basePath": "/",
   "schemes": [
-    "http",
     "https"
   ],
   "paths": {
