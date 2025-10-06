@@ -44,8 +44,8 @@ exports.findAll = async (req, res) => {
   /*
     #swagger.description = 'API Key if needed: Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68XwZj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N'
   */
-  console.log(req.header('apiKey'));
-  if (req.header('apiKey') === apiKey) {
+  const isAdmin = req.isAuthenticated && req.isAuthenticated() && req.user && req.user.role === 'admin';
+  if (isAdmin || req.header('apiKey') === apiKey) {
     try {
       const data = await Client.find(
         {},

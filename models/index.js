@@ -14,4 +14,7 @@ db.employee = mongoose.model('employee', EmployeeSchema);
 // Export Client model
 db.client = require('./client.js')(mongoose);
 
+// Export User model
+db.user = require('./user.js')(mongoose);
+
 module.exports = db;

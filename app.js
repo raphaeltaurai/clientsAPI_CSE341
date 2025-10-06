@@ -4,6 +4,10 @@ const app = express();
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
+const session = require('express-session');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github2').Strategy;
+const db = require('./models');
 
 
 app
@@ -11,9 +15,16 @@ app
 .use(cors())
 .use(express.json())
 .use(express.urlencoded({ extended: true }))
-.use('/', require('./routes'));
+.use(session({
+  secret: process.env.SESSION_SECRET || 'change-me',
+  resave: false,
+  saveUninitialized: false,
+}))
+.use(passport.initialize())
+.use(passport.session())
+.use('/', require('./routes'))
+.use('/auth', require('./routes/auth'));
 
-const db = require('./models');
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
@@ -29,3 +40,39 @@ db.mongoose
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
   });
+
+// Passport config
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await db.user.findById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+passport.use(new GitHubStrategy({
+  clientID: process.env.GITHUB_CLIENT_ID || '',
+  clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+  callbackURL: '/auth/github/callback'
+}, async (accessToken, refreshToken, profile, done) => {
+  try {
+    const existing = await db.user.findOne({ provider: 'github', providerId: profile.id });
+    if (existing) return done(null, existing);
+    const user = await db.user.create({
+      provider: 'github',
+      providerId: profile.id,
+      email: (profile.emails && profile.emails[0] && profile.emails[0].value) || '',
+      displayName: profile.displayName,
+      photo: (profile.photos && profile.photos[0] && profile.photos[0].value) || '',
+      role: 'admin' // Seed first login as admin; adjust as needed
+    });
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+}));

@@ -1,8 +1,15 @@
 const routes = require('express').Router();
 const clients = require('../controllers/client.js');
 
-// Get all clients
-routes.get('/', clients.findAll);
+function requireAdmin(req, res, next) {
+  if (req.isAuthenticated && req.isAuthenticated() && req.user && req.user.role === 'admin') {
+    return next();
+  }
+  return res.status(401).send('Unauthorized');
+}
+
+// Get all clients (admin only if logged in), else API key required in controller
+routes.get('/', requireAdmin, clients.findAll);
 
 // Create a new client
 routes.post('/', clients.create);
