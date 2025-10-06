@@ -11,6 +11,7 @@ const db = require('./models');
 
 
 app
+.set('trust proxy', 1)
 .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 .use(cors())
 .use(express.json())
@@ -58,7 +59,8 @@ passport.deserializeUser(async (id, done) => {
 passport.use(new GitHubStrategy({
   clientID: process.env.GITHUB_CLIENT_ID || '',
   clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-  callbackURL: '/auth/github/callback'
+  // Use explicit callback URL when provided to avoid proxy/protocol mismatches
+  callbackURL: process.env.GITHUB_CALLBACK_URL || '/auth/github/callback'
 }, async (accessToken, refreshToken, profile, done) => {
   try {
     const existing = await db.user.findOne({ provider: 'github', providerId: profile.id });
