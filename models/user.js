@@ -4,6 +4,7 @@ module.exports = (mongoose) => {
       provider: { type: String, required: true },
       providerId: { type: String, required: true, index: true, unique: true },
       email: { type: String, required: true, lowercase: true, index: true },
+      passwordHash: { type: String },
       displayName: { type: String },
       photo: { type: String },
       role: { type: String, enum: ['user', 'admin'], default: 'user' }

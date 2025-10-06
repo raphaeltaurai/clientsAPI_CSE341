@@ -12,31 +12,31 @@ function requireAdmin(req, res, next) {
 routes.get('/', requireAdmin, clients.findAll);
 
 // Create a new client
-routes.post('/', clients.create);
+routes.post('/', requireAdmin, clients.create);
 
-// Get clients with additional info
-routes.get('/additional-info', clients.findAllWithAdditionalInfo);
+// Get clients with additional info (admin only)
+routes.get('/additional-info', requireAdmin, clients.findAllWithAdditionalInfo);
 
-// Get a single client by id
-routes.get('/:client_id', clients.findOne);
+// Get a single client by id (admin only)
+routes.get('/:client_id', requireAdmin, clients.findOne);
 
 // Update a client by id
-routes.put('/:client_id', clients.update);
+routes.put('/:client_id', requireAdmin, clients.update);
 
 // Delete a client by id
-routes.delete('/:client_id', clients.delete);
+routes.delete('/:client_id', requireAdmin, clients.delete);
 
 // Delete all clients
-routes.delete('/', clients.deleteAll);
+routes.delete('/', requireAdmin, clients.deleteAll);
 
 // Employee management routes
 // Add an employee to a client
-routes.post('/:client_id/employees', clients.addEmployee);
+routes.post('/:client_id/employees', requireAdmin, clients.addEmployee);
 
-// Get all employees for a specific client
-routes.get('/:client_id/employees', clients.getClientEmployees);
+// Get all employees for a specific client (admin only)
+routes.get('/:client_id/employees', requireAdmin, clients.getClientEmployees);
 
 // Remove an employee from a client
-routes.delete('/:client_id/employees/:employee_id', clients.removeEmployee);
+routes.delete('/:client_id/employees/:employee_id', requireAdmin, clients.removeEmployee);
 
 module.exports = routes;

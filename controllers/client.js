@@ -45,7 +45,7 @@ exports.findAll = async (req, res) => {
     #swagger.description = 'API Key if needed: Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68XwZj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N'
   */
   const isAdmin = req.isAuthenticated && req.isAuthenticated() && req.user && req.user.role === 'admin';
-  if (isAdmin || req.header('apiKey') === apiKey) {
+  if (isAdmin) {
     try {
       const data = await Client.find(
         {},
@@ -56,29 +56,22 @@ exports.findAll = async (req, res) => {
       res.status(500).send({ message: err.message || 'Some error occurred while retrieving clients.' });
     }
   } else {
-    res.status(401).send('Invalid apiKey, please read the documentation.');
+    res.status(401).send('Unauthorized');
   }
 };
 
-// Find a single Client with an id
+// Find a single Client with an id (admin access enforced by routes middleware)
 exports.findOne = async (req, res) => {
-  /*
-    #swagger.description = 'API Key if needed: Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68XwZj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N'
-  */
   const client_id = req.params.client_id;
-  if (req.header('apiKey') === apiKey) {
-    try {
-      const data = await Client.find({ client_id: client_id });
-      if (!data || data.length === 0) {
-        res.status(404).send({ message: 'Not found Client with id ' + client_id });
-      } else {
-        res.send(data[0]);
-      }
-    } catch (err) {
-      res.status(500).send({ message: 'Error retrieving Client with client_id=' + client_id });
+  try {
+    const data = await Client.find({ client_id: client_id });
+    if (!data || data.length === 0) {
+      res.status(404).send({ message: 'Not found Client with id ' + client_id });
+    } else {
+      res.send(data[0]);
     }
-  } else {
-    res.status(401).send('Invalid apiKey, please read the documentation.');
+  } catch (err) {
+    res.status(500).send({ message: 'Error retrieving Client with client_id=' + client_id });
   }
 };
 

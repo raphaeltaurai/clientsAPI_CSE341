@@ -13,16 +13,7 @@
   "paths": {
     "/clients": {
       "get": {
-        "description": "Get all clients",
-        "parameters": [
-          {
-            "name": "apiKey",
-            "in": "header",
-            "required": true,
-            "type": "string",
-            "description": "Ezl0961tEpx2UxTZ5v2uKFK91qdNAr5npRlMT1zLcE3Mg68Xwaj3N8Dyp1R8IvFenrVwHRllOUxF0Og00l0m9NcaYMtH6Bpgdv7N"
-          }
-        ],
+        "description": "Get all clients (admin login required)",
         "responses": {
           "200": { "description": "OK" },
           "401": { "description": "Unauthorized" },
@@ -76,7 +67,7 @@
     },
     "/clients/additional-info": {
       "get": {
-        "description": "Get clients with additional info",
+        "description": "Get clients with additional info (admin login required)",
         "responses": {
           "200": { "description": "OK" },
           "500": { "description": "Internal Server Error" }
@@ -85,17 +76,11 @@
     },
     "/clients/{client_id}": {
       "get": {
-        "description": "Get a single client by ID",
+        "description": "Get a single client by ID (admin login required)",
         "parameters": [
           {
             "name": "client_id",
             "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "apiKey",
-            "in": "header",
             "required": true,
             "type": "string"
           }
@@ -199,7 +184,7 @@
         }
       },
       "get": {
-        "description": "Get all employees for a client",
+        "description": "Get all employees for a client (admin login required)",
         "parameters": [
           {
             "name": "client_id",
