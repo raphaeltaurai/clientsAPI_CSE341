@@ -8,35 +8,35 @@ function requireAdmin(req, res, next) {
   return res.status(401).send('Unauthorized');
 }
 
-// Get all clients (admin only if logged in), else API key required in controller
-routes.get('/', requireAdmin, clients.findAll);
+// Get all clients (public)
+routes.get('/', clients.findAll);
 
-// Create a new client
+// Create a new client (admin only)
 routes.post('/', requireAdmin, clients.create);
 
-// Get clients with additional info (admin only)
-routes.get('/additional-info', requireAdmin, clients.findAllWithAdditionalInfo);
+// Get clients with additional info (public)
+routes.get('/additional-info', clients.findAllWithAdditionalInfo);
 
-// Get a single client by id (admin only)
-routes.get('/:client_id', requireAdmin, clients.findOne);
+// Get a single client by id (public)
+routes.get('/:client_id', clients.findOne);
 
-// Update a client by id
+// Update a client by id (admin only)
 routes.put('/:client_id', requireAdmin, clients.update);
 
-// Delete a client by id
+// Delete a client by id (admin only)
 routes.delete('/:client_id', requireAdmin, clients.delete);
 
-// Delete all clients
+// Delete all clients (admin only)
 routes.delete('/', requireAdmin, clients.deleteAll);
 
 // Employee management routes
-// Add an employee to a client
+// Add an employee to a client (admin only)
 routes.post('/:client_id/employees', requireAdmin, clients.addEmployee);
 
-// Get all employees for a specific client (admin only)
-routes.get('/:client_id/employees', requireAdmin, clients.getClientEmployees);
+// Get all employees for a specific client (public)
+routes.get('/:client_id/employees', clients.getClientEmployees);
 
-// Remove an employee from a client
+// Remove an employee from a client (admin only)
 routes.delete('/:client_id/employees/:employee_id', requireAdmin, clients.removeEmployee);
 
 module.exports = routes;
