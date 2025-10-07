@@ -3,7 +3,7 @@ module.exports = (mongoose) => {
     {
       provider: { type: String, required: true },
       providerId: { type: String, required: true, index: true, unique: true },
-      email: { type: String, required: true, lowercase: true, index: true },
+      email: { type: String, required: function() { return this.provider === 'local'; }, lowercase: true, index: true },
       passwordHash: { type: String },
       displayName: { type: String },
       photo: { type: String },

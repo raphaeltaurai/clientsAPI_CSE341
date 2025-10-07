@@ -65,11 +65,16 @@ passport.use(new GitHubStrategy({
   try {
     const existing = await db.user.findOne({ provider: 'github', providerId: profile.id });
     if (existing) return done(null, existing);
+    
+    // Get email from GitHub profile, or use a fallback
+    const email = (profile.emails && profile.emails[0] && profile.emails[0].value) || 
+                  `github-${profile.id}@example.com`;
+    
     const user = await db.user.create({
       provider: 'github',
       providerId: profile.id,
-      email: (profile.emails && profile.emails[0] && profile.emails[0].value) || '',
-      displayName: profile.displayName,
+      email: email,
+      displayName: profile.displayName || profile.username || 'GitHub User',
       photo: (profile.photos && profile.photos[0] && profile.photos[0].value) || '',
       role: 'admin' // Seed first login as admin; adjust as needed
     });
